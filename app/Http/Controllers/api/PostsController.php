@@ -22,4 +22,15 @@ class PostsController extends Controller
             }
         }
     }
+
+    public function runParser()
+    {
+        $output = null;
+        $retval = null;
+        $cmd = "cd ../; bash vendor/bin/sail artisan start:parser";
+        exec($cmd, $otvet, $retval);
+//        $otvet = shell_exec($cmd);
+
+        return json_encode(['message' => $otvet]);
+    }
 }

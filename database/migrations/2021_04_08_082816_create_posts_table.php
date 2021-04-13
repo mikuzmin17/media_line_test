@@ -17,8 +17,9 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->text('href')->nullable();
             $table->text('title')->nullable();
-            $table->binary('img')->nullable();
             $table->text('text')->nullable();
+            $table->json('img')->nullable();
+            $table->json('authors')->nullable();
             $table->timestamps();
         });
     }

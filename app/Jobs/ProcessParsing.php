@@ -56,15 +56,17 @@ class ProcessParsing implements ShouldQueue
         $documentPost = $this->validate($documentPost);
         $header = $this->parserHeader($documentPost);
         $text = $this->parserArticle($documentPost);
-        $img = $documentPost->find('img');
-        if ($img) var_dump("img");
+        $img = $this->parserImg($documentPost);
+        $authors = $this->parserAuthors($documentPost);
+        if ($img) var_dump($img);
 
         // вставить в базу данных (составить структуру самому)
         $post = new Post();
         $post->href = $href;
         $post->title = $header;
         $post->text = $text;
-//        $post->img = $img;
+        $post->img = json_encode($img);
+        $post->authors = json_encode($authors);
         $post->save();
     }
 
@@ -87,6 +89,25 @@ class ProcessParsing implements ShouldQueue
     }
 
     /**
+     * Получим статью
+     * @param $documentPost
+     * @throws \DiDom\Exceptions\InvalidSelectorException
+     */
+    public function parserAuthors($documentPost)
+    {
+        $authors = $documentPost->find('.article__authors__author');
+        $href = [];
+        $text = [];
+        if ($authors) {
+            foreach ($authors as $author) {
+                $href[] = $author->getAttribute('href');
+                $text[] = $author->text();
+            }
+        }
+        return ["href"=> $href, "text" => $text];
+    }
+
+    /**
      * Получим заголовок
      * @param $documentPost
      * @return string
@@ -98,8 +119,35 @@ class ProcessParsing implements ShouldQueue
         try {
             return $header[0]->text();
         } catch (\Exception $exception) {
-            return $header[0]-> innerHtml();
+//            return $exception;
+//            return $header[0]-> innerHtml();
         }
+    }
+
+    /**
+     *
+     * @param $documentPost
+     * @return array[]
+     */
+    public function parserImg($documentPost)
+    {
+        $img = $documentPost->find('img');
+        $src = [];
+        $alt = [];
+        if ($img) {
+            foreach ($img as $i) {
+                $src[] = $i->getAttribute('src');
+                $alt[] = $i->getAttribute('alt');
+            }
+
+            if (array_keys(array_filter($alt))) {
+                $src = $src[array_keys(array_filter($alt))[0]] ;
+            }
+            if (array_values(array_filter($alt))) {
+                $alt = array_values(array_filter($alt))[0];
+            }
+        }
+        return ["src"=> $src, "alt" => $alt];
     }
 
     /**

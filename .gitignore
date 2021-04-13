@@ -6,6 +6,8 @@
 .env
 .env.backup
 .phpunit.result.cache
+.idea/vcs.xml
+.gitignore
 docker-compose.override.yml
 Homestead.json
 Homestead.yaml

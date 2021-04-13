@@ -20,5 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('posts/{post?}', [PostsController::class, 'getPosts']);
+Route::get('parser', [PostsController::class, 'runParser']);
 
 
