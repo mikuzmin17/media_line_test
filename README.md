@@ -13,14 +13,30 @@ Clone repo:
 git clone https://github.com/mikuzmin17/media_line_test.git
 
 cd media_line_test
-```
-rename .env.example to .env
-```
+
+mv .env.example .env
+
 composer update
 
 alias sail='bash vendor/bin/sail'
 
 sail up -d
+
+docker exec -it media_line_test_mysql_1 bash;
+
+mysql;
+
+CREATE USER 'sail'@'%' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON *.* TO 'sail'@'%' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+
+CREATE DATABASE parser;
+
+exit
+
+exit
 
 sail artisan migrate
 ```
@@ -29,3 +45,4 @@ sail artisan migrate
 ```
 sail artisan start:parser
 ```
+можно видеть результат на http://localhost:91

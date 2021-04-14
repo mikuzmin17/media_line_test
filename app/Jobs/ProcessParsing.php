@@ -34,7 +34,6 @@ class ProcessParsing implements ShouldQueue
      */
     public function handle()
     {
-        // Спарсить (программно) первые 15 новостей с rbk.ru
         $response = Http::get('https://www.rbc.ru');
         $document = new Document($response->body());
         $links = $document->find('.news-feed__item.js-news-feed-item.js-yandex-counter');
@@ -58,9 +57,7 @@ class ProcessParsing implements ShouldQueue
         $text = $this->parserArticle($documentPost);
         $img = $this->parserImg($documentPost);
         $authors = $this->parserAuthors($documentPost);
-        if ($img) var_dump($img);
-
-        // вставить в базу данных (составить структуру самому)
+        // вставить в базу данных
         $post = new Post();
         $post->href = $href;
         $post->title = $header;
