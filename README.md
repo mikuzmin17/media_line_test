@@ -20,8 +20,23 @@ composer update
 
 alias sail='bash vendor/bin/sail'
 
+sail build
+
 sail up -d
 
+sail artisan migrate
+```
+### Парсинг 
+Для запуска парсинга нужно из терминала запустить команду 
+```
+sail artisan start:parser
+```
+можно видеть результат на http://localhost:91
+
+
+
+если миграции не запустились, то 
+```
 docker exec -it media_line_test_mysql_1 bash;
 
 mysql;
@@ -39,10 +54,5 @@ exit
 exit
 
 sail artisan migrate
+
 ```
-###Парсинг 
-Для запуска парсинга нужно из терминала запустить команду 
-```
-sail artisan start:parser
-```
-можно видеть результат на http://localhost:91
